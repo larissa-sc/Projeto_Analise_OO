@@ -1,4 +1,17 @@
 public class Produto {
+
+    private static Produto instance;
+
+    private  Produto() {
+    }
+
+    public static Produto getInstance() {
+        if (instance == null) {
+            instance = new Produto();
+        }
+        return instance;
+    }
+
     private String codDeBarras;
     private String nome;
     private String marca;
