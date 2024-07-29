@@ -67,4 +67,8 @@ public class ControladorProduto {
 		    produtoDAO.deletar(produto);
 	    }
     }
+
+    public List<Produto> listar(){
+	    return produtoDAO.listar();
+    }
 }
