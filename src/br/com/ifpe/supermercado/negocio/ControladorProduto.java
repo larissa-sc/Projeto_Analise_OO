@@ -6,6 +6,13 @@ import java.util.function.Predicate;
 
 public class ControladorProduto {
     GenericDAO<Produto> produtoDAO = new GenericDAO();
+	
+//criando apenas uma instância do controlador	
+    private static final ControladorProduto instance = new ControladorProduto();
+    private ControladorProduto(){}
+    private static ControladorProduto.getInstance(){
+	    return instance;
+    }
 
     private Produto procurarProduto(String codigoDeBarras) {
 		Predicate<Produto> filter = produto -> produto.getCodigoDeBarras().equals(codigoDeBarras);
