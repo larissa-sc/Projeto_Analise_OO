@@ -1,16 +1,25 @@
 package br.com.ifpe.supermercado.apresentacao;
 
+import br.com.ifpe.supermercado.negocio.ControladorProduto;
 import java.util.Scanner;
 
 public class TelaProduto {
-
-    Scanner scan = new Scanner(System.in);
+//criando apenas uma instância do controlador (Singleton)
+    private static final TelaProduto instance = new TelaProduto();
+    private Scanner scan = new Scanner(System.in);
     ControladorProduto controladorProduto = ControladorProduto.getInstance();
 
-    public void TelaProduto(Scanner scan){
+    private TelaProduto(){}
+
+    public static TelaProduto getInstance(){
+	    return instance;
+    }
+
+    public void iniciar(Scanner scan){
         while (true) {
             menuPrincipal();
             int escolha = scan.nextInt();
+	    scan.nextLine();
 
 	    switch(escolha){
 		    case 1:
@@ -51,6 +60,7 @@ public class TelaProduto {
 
 	System.out.println("Digite a quantidade: ");
 	int quantidade = scan.nextInt();
+	scan.nextLine();
 
 	controladorProduto.criarProduto(codigoDeBarras, nome, marca, quantidade);
 	System.out.println("Produto criado e adicionado.");
@@ -62,7 +72,8 @@ public class TelaProduto {
 
 	System.out.println("Digite a quantidade atual: ");
 	int quantidade = scan.nextInt();
-
+	scan.nextLine();
+	    
 	controladorProduto.atualizarProduto(codigoDeBarras, quantidade);
 	System.out.println("O produto foi atualizado.");
     }
