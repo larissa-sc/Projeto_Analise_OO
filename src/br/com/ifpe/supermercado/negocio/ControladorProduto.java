@@ -1,6 +1,6 @@
 package br.com.ifpe.supermercado.negocio;
 
-import br.com.ifpe.supermercado.entidades.classeabstrata.Produto;
+import br.com.ifpe.supermercado.entidades.classesconcretas.Produto;
 import br.com.ifpe.supermercado.persistencia.GenericDAO;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -8,12 +8,12 @@ import java.util.function.Predicate;
 
 public class ControladorProduto {
 //O controlador irá fazer a "ponte" entre o Tela Produto (do cliente) e o Dao Genérico que faz o controle da lista com os produtos
-    GenericDAO<Produto> produtoDAO = new GenericDAO<>();
+    GenericDAO<Produto> produtoDAO = DAOFactory.criarDAO();
 	
 //criando apenas uma instância do controlador (Singleton)
     private static final ControladorProduto instance = new ControladorProduto();
     private ControladorProduto(){}
-    private static ControladorProduto getInstance(){
+    public static ControladorProduto getInstance(){
 	    return instance;
     }
 
@@ -56,16 +56,16 @@ public class ControladorProduto {
 	    Produto produto = procurarProduto(codigoDeBarras); //método que guarda no produto se ele existe ou não (nesse caso null)
 
 	    if (produto == null){ //verifica se é nulo (não existe)
-		    throw new NoSuchElementException("O código de barras " + codigoDeBarras + " não foi encontrado.");)
+		    throw new NoSuchElementException("O código de barras " + codigoDeBarras + " não foi encontrado.");
 	    }
-	    else{ //caso contrário cria uma cópia de segurança do produto original para que seja feita a atualização completa dele (só é possível alterar a quantidade)
+	    else{ //caso contrário cria uma cópia de segurança do produto original para que seja feita a atualização completa dele (só é possível alterar a quantidade e o preço)
 		    Produto copia = produto;
 		    copia.setCodigoDeBarras(produto.getCodigoDeBarras());
 		    copia.setNome(produto.getNome());
 		    copia.setMarca(produto.getMarca());
 		    copia.setQuantidade(quantidade);
+			produtoDAO.atualizar(produtoDAO.listar().indexOf(produto), copia); //quando completo, atualiza na lista o produto anterior pelo novo (cópia)
 	    }
-	    produtoDAO.atualizar(produtoDAO.listar().indexOf(produto), copia); //quando completo, atualiza na lista o produto anterior pelo novo (cópia)
     }
 
 //método para deletar um produto
@@ -73,7 +73,7 @@ public class ControladorProduto {
 	    Produto produto = procurarProduto(codigoDeBarras); //método que guarda no produto se ele existe ou não (nesse caso null)
 	    
 	    if (produto == null){ //verifica se é nulo (não existe)
-		    throw new NoSuchElementException("O código de barras " + codigoDeBarras + " não foi encontrado.");)
+		    throw new NoSuchElementException("O código de barras " + codigoDeBarras + " não foi encontrado.");
 	    }
 	    else{ //se existir ele exclui da lista
 		    produtoDAO.deletar(produto);
