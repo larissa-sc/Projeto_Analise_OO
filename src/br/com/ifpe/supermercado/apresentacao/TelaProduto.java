@@ -1,13 +1,14 @@
 package br.com.ifpe.supermercado.apresentacao;
 
-import br.com.ifpe.supermercado.negocio.ControladorProduto;
 import java.util.Scanner;
+
+import br.com.ifpe.supermercado.entidades.classesconcretas.Produto;
 
 public class TelaProduto {
 //criando apenas uma instância do controlador (Singleton)
     private static final TelaProduto instance = new TelaProduto();
     private Scanner scan = new Scanner(System.in);
-    ControladorProduto controladorProduto = ControladorProduto.getInstance();
+    private Fachada fachadaProduto = new Fachada();
 
     private TelaProduto(){}
 
@@ -15,7 +16,7 @@ public class TelaProduto {
 	    return instance;
     }
 
-    public void iniciar(Scanner scan){
+    public void iniciar(){
         while (true) {
             menuPrincipal();
             int escolha = scan.nextInt();
@@ -39,15 +40,19 @@ public class TelaProduto {
 			break;
 
 		    case 5:
-			controladorProduto.listar().forEach(System.out::println);
+				if (fachadaProduto.listar() == null) {
+					
+				}
+				fachadaProduto.listar().forEach(System.out::println);
 			break;
 
 		    default:
-			    System.out.println("Opção inválida.")
+			    System.out.println("Opção inválida.");
 	    }
         }
     }
 
+// CRIANDO PRODUTO XXXXXXXXXXXX
     private void criar(){
 	System.out.println("Digite o código de barras: ");
 	String codigoDeBarras = scan.nextLine();
@@ -62,10 +67,16 @@ public class TelaProduto {
 	int quantidade = scan.nextInt();
 	scan.nextLine();
 
-	controladorProduto.criarProduto(codigoDeBarras, nome, marca, quantidade);
+	System.out.println("Digite o preço do produto: ");
+	double preco = scan.nextInt();
+	scan.nextLine();
+
+	Produto produto = new Produto(codigoDeBarras, nome, marca, quantidade, preco);
+	fachadaProduto.criarProduto(produto);
 	System.out.println("Produto criado e adicionado.");
     }
 
+// ATUALIZANDO PRODUTO XXXXXXXXX
     private void atualizar(){
 	System.out.println("Digite o código de barras do produto a ser atualizado: ");
 	String codigoDeBarras = scan.nextLine();
@@ -74,30 +85,34 @@ public class TelaProduto {
 	int quantidade = scan.nextInt();
 	scan.nextLine();
 	    
-	controladorProduto.atualizarProduto(codigoDeBarras, quantidade);
+	fachadaProduto.atualizarProduto(codigoDeBarras, quantidade);
 	System.out.println("O produto foi atualizado.");
     }
 
+// LENDO PRODUTO XXXXXXXXXX
     private void ler(){
 	System.out.println("Digite o código de barras do produto: ");
 	String codigoDeBarras = scan.nextLine();
 
-	System.out.println(controladorProduto.lerProduto(codigoDeBarras));
+	System.out.println(fachadaProduto.lerProduto(codigoDeBarras));
     }
 
+// DELETAR PRODUTO XXXXXXXXXX
     private void deletar(){
 	System.out.println("Digite o código de barras do produto a ser deletado: ");
 	String codigoDeBarras = scan.nextLine();
 
-	controladorProduto.deletarProduto(codigoDeBarras);
+	fachadaProduto.deletarProduto(codigoDeBarras);
 	System.out.println("Produto removido.");
     }
+	
+// MENU PRINCIPAL XXXXXXXXX
     private static void menuPrincipal() {
 		System.out.println("--------- Menu ---------" +
 				"\n 1. Criar Produto" +
 				"\n 2. Atualizar Produto" +
 				"\n 3. Exibir Informações do Produto" +
-                		"\n 4. Deletar Produto" +
+                "\n 4. Deletar Produto" +
 				"\n 5. Mostrar todos os produtos" +
 				"\n Digite o número da opção desejada: \n");
 	}
