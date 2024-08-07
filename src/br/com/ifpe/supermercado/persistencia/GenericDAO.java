@@ -1,6 +1,6 @@
 package br.com.ifpe.supermercado.persistencia;
 
-import br.com.ifpe.supermercado.entidades.classeabstrata.EntidadeBase;
+import br.com.ifpe.supermercado.entidades.classesabstratas.EntidadeBase;
 import br.com.ifpe.supermercado.interfaces.IGenericDAO;
 import java.util.ArrayList;
 import java.util.List;
