@@ -2,6 +2,7 @@ package br.com.ifpe.supermercado.entidades.classesconcretas;
 
 import br.com.ifpe.supermercado.entidades.classesabstratas.EntidadeBase;
 
+//classe abstrata pois age como a entidade base do projeto geral
 public class Produto extends EntidadeBase {
 	
 	private String codigoDeBarras;
@@ -18,7 +19,6 @@ public class Produto extends EntidadeBase {
 		this.preco = preco;
 	}
 
-    @Override
 	public String toString(){
 		return "Produto [ codigoDeBarras = " + codigoDeBarras + 
 						", nome = " + nome +

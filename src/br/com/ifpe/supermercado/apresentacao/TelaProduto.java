@@ -1,8 +1,9 @@
 package br.com.ifpe.supermercado.apresentacao;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
-
 import br.com.ifpe.supermercado.entidades.classesconcretas.Produto;
+import br.com.ifpe.supermercado.entidades.classesconcretas.Produto.ProdutoBuilder;
 
 public class TelaProduto {
 //criando apenas uma instância do controlador (Singleton)
@@ -41,13 +42,13 @@ public class TelaProduto {
 
 		    case 5:
 				if (fachadaProduto.listar() == null) {
-					
+					throw new NoSuchElementException("Não há produtos cadastrados.");
 				}
 				fachadaProduto.listar().forEach(System.out::println);
 			break;
 
 		    default:
-			    System.out.println("Opção inválida.");
+			throw new NoSuchElementException("Opção inválida.");
 	    }
         }
     }
@@ -71,7 +72,13 @@ public class TelaProduto {
 	double preco = scan.nextInt();
 	scan.nextLine();
 
-	Produto produto = new Produto(codigoDeBarras, nome, marca, quantidade, preco);
+	Produto produto = new ProdutoBuilder()
+					.codigoDeBarras(codigoDeBarras)
+					.nome(nome)
+					.marca(marca)
+					.quantidade(quantidade)
+					.preco(preco)
+					.build();
 	fachadaProduto.criarProduto(produto);
 	System.out.println("Produto criado e adicionado.");
     }
