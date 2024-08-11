@@ -19,6 +19,7 @@ public class Produto extends EntidadeBase {
 		this.preco = preco;
 	}
 
+    @Override
 	public String toString(){
 		return "Produto [ codigoDeBarras = " + codigoDeBarras + 
 						", nome = " + nome +

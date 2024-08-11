@@ -3,78 +3,66 @@ package br.com.ifpe.supermercado.negocio.controlador;
 import java.util.List;
 
 import br.com.ifpe.supermercado.entidades.classesabstratas.EntidadeBase;
-import br.com.ifpe.supermercado.entidades.classesconcretas.Produto;
 import br.com.ifpe.supermercado.negocio.factory.DAOFactory;
 import br.com.ifpe.supermercado.persistencia.GenericDAO;
+import java.util.NoSuchElementException;
 
-public interface GenericControlador<Tipo extends EntidadeBase> {
-//O controlador irá fazer a "ponte" entre a Tela (do cliente) e o Dao Genérico que faz o controle da lista
-    GenericDAO<Tipo extends EntidadeBase> tipoDAO = DAOFactory.criarDAO();
-
-//Método para fazer a busca e verificar se o produto já existe dentro do sistema usando o Predicate e filter (filtrar)
-    @SuppressWarnings("hiding") 
-    public <Tipo extends EntidadeBase> void procurar(Tipo objeto) {
-		return produtoDAO.ler(filter);
+public abstract class GenericControlador<Tipo extends EntidadeBase> implements IGenericControlador<Tipo>{
+	//O controlador irá fazer a "ponte" entre a Tela (do cliente) e o Dao Genérico que faz o controle da lista
+    protected final GenericDAO<Tipo> dao;
+	
+	public GenericControlador(){
+		this.dao = DAOFactory.criarDAO();
 	}
 
-//método que cria um produto a partir dos seus atributos
-    public void criarProduto(Tipo objeto){
-        Tipo objeto = procurar();
+	//método que cria um objeto a partir dos seus atributos
+    @Override
+    public void criar(Tipo objeto){
 
 	    if (objeto != null){ //se for diferente de nulo significa que ele já existe
-		    throw new NoSuchElementException("Já está cadastrado.");
+		    throw new NoSuchElementException("O objeto já está cadastrado no sistema.");
 	    }
-	    else { 
-            objeto = objeto;
-	    }
-	    tipoDAO.inserir(objeto); //após criar, chama o DAO para que adicione ele na lista única de produtos
+
+        dao.inserir(objeto); //após criar, chama o DAO para que adicione ele na lista única de produtos
     }
 
-//método para mostrar as informações de um produto
-    public Produto lerProduto(String codigoDeBarras){
-	    Produto produto = procurarProduto(codigoDeBarras); //método que guarda no produto se ele existe ou não (nesse caso null)
+	//método para mostrar as informações de um produto
+    @Override
+    public Tipo ler(Tipo objeto){
 
-	    if(produto == null){ //verifica se ele não existe
-		    throw new NoSuchElementException("O código de barras " + codigoDeBarras + " não foi encontrado.");
+	    if(objeto == null){ //verifica se ele não existe
+		    throw new NoSuchElementException("Não foi possível localizar o objeto.");
 	    }
-	    return produto; //se existir, repassa as informações dele
+
+	    return objeto; //se existir, repassa as informações dele
     }
 
-//método para atualizar um produto
-    public void atualizarQProduto(String codigoDeBarras, int quantidade){
-	    Produto produto = procurarProduto(codigoDeBarras); //método que guarda no produto se ele existe ou não (nesse caso null)
-
-	    if (produto == null){ //verifica se é nulo (não existe)
-		    throw new NoSuchElementException("O código de barras " + codigoDeBarras + " não foi encontrado.");
+	//método para atualizar um produto
+    public void atualizar(Tipo objeto){
+	   
+	    if (objeto == null){ //verifica se é nulo (não existe)
+		    throw new NoSuchElementException("Não foi possível localizar o objeto.");
 	    }
 	    else{
-			int index = listar().indexOf(produto);
-		    produto = new ProdutoBuilder()
-			.codigoDeBarras(produto.getCodigoDeBarras())
-			.nome(produto.getNome())
-			.marca(produto.getMarca())
-			.quantidade(quantidade)
-			.preco(produto.getPreco())
-			.build();
-			
-			produtoDAO.atualizar(index, produto);
+			dao.atualizar(listar().indexOf(objeto),objeto);
 	    }
     }
 
-//método para deletar um produto
-    public void deletarProduto(String codigoDeBarras){
-	    Produto produto = procurarProduto(codigoDeBarras); //método que guarda no produto se ele existe ou não (nesse caso null)
-	    
-	    if (produto == null){ //verifica se é nulo (não existe)
-		    throw new NoSuchElementException("O código de barras " + codigoDeBarras + " não foi encontrado.");
+	//método para deletar um produto
+    @Override
+    public void deletar(Tipo objeto){
+		
+	    if (objeto == null){ //verifica se é nulo (não existe)
+		    throw new NoSuchElementException("Objeto não encontrado.");
 	    }
 	    else{ //se existir ele exclui da lista
-		    produtoDAO.deletar(produto);
+		    dao.deletar(objeto);
 	    }
     }
 
-//método que lista todos os produtos existentes para o usuário
-    public List<Produto> listar(){
-	    return produtoDAO.listar(); //chama o método do DAO para mostrar os produtos
+	//método que lista todos os produtos existentes para o usuário
+    @Override
+    public List<Tipo> listar(){
+	    return dao.listar(); //chama o método do DAO para mostrar os produtos
     }
 }
