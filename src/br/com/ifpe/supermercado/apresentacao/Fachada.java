@@ -1,11 +1,12 @@
 package br.com.ifpe.supermercado.apresentacao;
 
 import br.com.ifpe.supermercado.entidades.classesconcretas.Produto;
-import br.com.ifpe.supermercado.negocio.controlador.ControladorProduto;
+import br.com.ifpe.supermercado.negocio.controlador.ControladorTeste;
+
 import java.util.List;
 
 public class Fachada {
-    private final ControladorProduto controladorProduto = ControladorProduto.getInstance();
+    private final ControladorTeste controladorProduto = ControladorTeste.getInstance();
 
     public void criarProduto(Produto produto){
         controladorProduto.criarProduto(produto);

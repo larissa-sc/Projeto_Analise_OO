@@ -1,5 +1,7 @@
+package br.com.ifpe.supermercado.negocio.controlador;
 
-import br.com.ifpe.supermercado.negocio.controlador.GenericControlador;
+import br.com.ifpe.supermercado.entidades.classesconcretas.Produto;
+import br.com.ifpe.supermercado.entidades.classesconcretas.Produto.ProdutoBuilder;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -19,14 +21,15 @@ public class ControladorTeste extends GenericControlador<Produto>{
 
     public void criarProduto(Produto p){
 	    Produto produto = procurarProduto(p.getCodigoDeBarras());  //método que guarda no produto se ele existe ou não (nesse caso null)
-
-        super.criar(produto);
+        if(produto == null){
+            super.criar(p);
+        }
     }
 
     public Produto lerProduto(String codigoDeBarras){
 	    Produto produto = procurarProduto(codigoDeBarras); //método que guarda no produto se ele existe ou não (nesse caso null)
 
-	    super.ler(produto);
+	    return super.ler(produto);
     }
 
     //método para atualizar a quantidade de um produto
@@ -41,7 +44,7 @@ public class ControladorTeste extends GenericControlador<Produto>{
         .preco(produto.getPreco())
         .build();
 
-	    super.atualizar(listar().indexOf(produto), produto);
+	    super.atualizar(produto);
     }
 
     //método para deletar um produto
@@ -54,6 +57,6 @@ public class ControladorTeste extends GenericControlador<Produto>{
     //método que lista todos os produtos existentes para o usuário
     @Override
     public List<Produto> listar(){
-        super.listar();
+        return super.listar();
     }
 }
