@@ -1,10 +1,11 @@
+package br.com.ifpe.supermercado.negocio.decorator;
 
-import br.com.ifpe.supermercado.negocio.decorator.PrecoDecorador;
+import br.com.ifpe.supermercado.entidades.classesconcretas.Produto;
 
 public class DecoradorPrecoBlackFriday extends PrecoDecorador{
     private final double desconto;
 
-    public DecoradorPrecoBlackFriday(Produto produto, double desconto) {
+    public DecoradorPrecoBlackFriday(Produto produto) {
         super(produto);
         this.desconto = 20;
     }

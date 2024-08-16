@@ -19,7 +19,7 @@ public abstract class GenericControlador<Tipo extends EntidadeBase> implements I
     @Override
     public void criar(Tipo objeto){
 
-	    if (objeto != null){ //se for diferente de nulo significa que ele já existe
+	    if (objeto == null){ //se for diferente de nulo significa que ele já existe
 		    throw new NoSuchElementException("O objeto já está cadastrado no sistema.");
 	    }
 

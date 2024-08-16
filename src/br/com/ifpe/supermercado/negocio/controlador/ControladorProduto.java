@@ -1,16 +1,16 @@
 package br.com.ifpe.supermercado.negocio.controlador;
 
 import br.com.ifpe.supermercado.entidades.classesconcretas.Produto;
-import br.com.ifpe.supermercado.entidades.classesconcretas.Produto.ProdutoBuilder;
-import br.com.ifpe.supermercado.negocio.factory.DAOFactory;
-import br.com.ifpe.supermercado.persistencia.GenericDAO;
+import br.com.ifpe.supermercado.interfaces.IPrecoAdapter;
+import br.com.ifpe.supermercado.negocio.decorator.DecoradorPrecoBlackFriday;
+import br.com.ifpe.supermercado.negocio.decorator.DecoradorPrecoDesconto;
+import br.com.ifpe.supermercado.negocio.adapter.PrecoAdapterDolar;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
-public class ControladorProduto {
-//O controlador irá fazer a "ponte" entre o Tela Produto (do cliente) e o Dao Genérico que faz o controle da lista com os produtos
-    GenericDAO<Produto> produtoDAO = DAOFactory.criarDAO();
+public class ControladorProduto extends GenericControlador<Produto>{
+	private IPrecoAdapter precoAdapterDolar = new PrecoAdapterDolar();
 	
 //criando apenas uma instância do controlador (Singleton)
     private static final ControladorProduto instance = new ControladorProduto();
@@ -22,68 +22,73 @@ public class ControladorProduto {
 //Método para fazer a busca e verificar se o produto já existe dentro do sistema usando o Predicate e filter (filtrar)
     private Produto procurarProduto(String codigoDeBarras) {
 		Predicate<Produto> filter = produto -> produto.getCodigoDeBarras().equals(codigoDeBarras);
-		return produtoDAO.ler(filter);
+		return dao.ler(filter);
 	}
 
-//método que cria um produto a partir dos seus atributos
     public void criarProduto(Produto p){
 	    Produto produto = procurarProduto(p.getCodigoDeBarras());  //método que guarda no produto se ele existe ou não (nesse caso null)
-
-	    if (produto != null){ //se for diferente de nulo significa que ele já existe
-		    throw new NoSuchElementException("O produto com código de barras: " + p.getCodigoDeBarras() + " já está cadastrado.");
-	    }
-	    else { //caso não exista: cria substituindo o primeiro produto (nulo) por um produto com todas as informações
-		    produto = p;
-	    }
-	    produtoDAO.inserir(produto); //após criar, chama o DAO para que adicione ele na lista única de produtos
+		if (produto ==  null) {
+			super.criar(p);
+		}
+		super.criar(produto);
     }
 
-//método para mostrar as informações de um produto
     public Produto lerProduto(String codigoDeBarras){
 	    Produto produto = procurarProduto(codigoDeBarras); //método que guarda no produto se ele existe ou não (nesse caso null)
 
-	    if(produto == null){ //verifica se ele não existe
-		    throw new NoSuchElementException("O código de barras " + codigoDeBarras + " não foi encontrado.");
-	    }
-	    return produto; //se existir, repassa as informações dele
+	    return super.ler(produto);
+		System.out.println("Preço em dólar: $" + precoAdapterDolar.getPrecoEmDolar(produto.getPreco()));
     }
 
-//método para atualizar um produto
+    //método para atualizar a quantidade de um produto
     public void atualizarQProduto(String codigoDeBarras, int quantidade){
 	    Produto produto = procurarProduto(codigoDeBarras); //método que guarda no produto se ele existe ou não (nesse caso null)
 
-	    if (produto == null){ //verifica se é nulo (não existe)
-		    throw new NoSuchElementException("O código de barras " + codigoDeBarras + " não foi encontrado.");
-	    }
-	    else{
-			int index = listar().indexOf(produto);
-		    produto = new ProdutoBuilder()
-			.codigoDeBarras(produto.getCodigoDeBarras())
-			.nome(produto.getNome())
-			.marca(produto.getMarca())
-			.quantidade(quantidade)
-			.preco(produto.getPreco())
-			.build();
-			
-			produtoDAO.atualizar(index, produto);
-			System.out.println("O produto foi atualizado.");
-	    }
+        produto.setQuantidade(quantidade);
+
+	    super.atualizar(produto);
+        System.out.println("O produto foi atualizado.");
     }
 
-//método para deletar um produto
+    public void aplicarDescontoBlack(String codigoDeBarras, int vezes){
+        Produto produto = procurarProduto(codigoDeBarras); //método que guarda no produto se ele existe ou não (nesse caso null)
+
+        if (produto == null) {
+            throw new NoSuchElementException("Objeto não encontrado.");
+        }
+
+        for (int i = 0; i < vezes; i++) {
+            DecoradorPrecoBlackFriday decorador = new DecoradorPrecoBlackFriday(produto);
+            produto.setPreco(decorador.getPreco());
+        }
+		System.out.println("O desconto foi aplicado.");
+    }
+
+    public void aplicarDescontoComum(String codigoDeBarras, int vezes){
+        Produto produto = procurarProduto(codigoDeBarras); //método que guarda no produto se ele existe ou não (nesse caso null)
+
+        if (produto == null) {
+            throw new NoSuchElementException("Objeto não encontrado.");
+        }
+
+        for (int i = 0; i < vezes; i++) {
+            DecoradorPrecoDesconto decorador = new DecoradorPrecoDesconto(produto);
+            produto.setPreco(decorador.getPreco());
+        }
+		System.out.println("O desconto foi aplicado.");
+    }
+
+    //método para deletar um produto
     public void deletarProduto(String codigoDeBarras){
 	    Produto produto = procurarProduto(codigoDeBarras); //método que guarda no produto se ele existe ou não (nesse caso null)
 	    
-	    if (produto == null){ //verifica se é nulo (não existe)
-		    throw new NoSuchElementException("O código de barras " + codigoDeBarras + " não foi encontrado.");
-	    }
-	    else{ //se existir ele exclui da lista
-		    produtoDAO.deletar(produto);
-	    }
+	    super.deletar(produto);
+		System.out.println("Produto removido."); 
     }
 
-//método que lista todos os produtos existentes para o usuário
+    //método que lista todos os produtos existentes para o usuário
+    @Override
     public List<Produto> listar(){
-	    return produtoDAO.listar(); //chama o método do DAO para mostrar os produtos
+        return super.listar();
     }
 }

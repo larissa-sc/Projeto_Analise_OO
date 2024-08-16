@@ -25,7 +25,7 @@ public class Produto extends EntidadeBase {
 						", nome = " + nome +
 						", marca = " + marca +
 						", quantidade = " + quantidade +
-						", preco = " + preco +"]";
+						", preco = R$  " + preco +"]";
 	}
 	
 	public double getPreco() {
