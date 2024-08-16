@@ -1,6 +1,7 @@
-
+import br.com.ifpe.supermercado.entidades.classesconcretas.Produto;
 import br.com.ifpe.supermercado.negocio.controlador.GenericControlador;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
 public class ControladorTeste extends GenericControlador<Produto>{
@@ -33,15 +34,24 @@ public class ControladorTeste extends GenericControlador<Produto>{
     public void atualizarQProduto(String codigoDeBarras, int quantidade){
 	    Produto produto = procurarProduto(codigoDeBarras); //método que guarda no produto se ele existe ou não (nesse caso null)
 
-        produto = new ProdutoBuilder()
-        .codigoDeBarras(produto.getCodigoDeBarras())
-        .nome(produto.getNome())
-        .marca(produto.getMarca())
-        .quantidade(quantidade)
-        .preco(produto.getPreco())
-        .build();
+        produto.setQuantidade(quantidade);
 
 	    super.atualizar(listar().indexOf(produto), produto);
+        System.out.println("O produto foi atualizado.");
+    }
+
+    public void aplicarDescontoBlack(String codigoDeBarras, int vezes){
+        Produto produto = procurarProduto(codigoDeBarras); //método que guarda no produto se ele existe ou não (nesse caso null)
+
+        if (produto == null) {
+            throw new NoSuchElementException("Objeto não encontrado.");
+        }
+
+        for (int i = 0; i < vezes; i++) {
+            decorador = new DecoradorPrecoBlackFriday(produto);
+        }
+
+        produto.setPreco(decorador.getPreco());
     }
 
     //método para deletar um produto

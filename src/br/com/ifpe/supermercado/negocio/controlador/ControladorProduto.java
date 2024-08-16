@@ -66,6 +66,7 @@ public class ControladorProduto {
 			.build();
 			
 			produtoDAO.atualizar(index, produto);
+			System.out.println("O produto foi atualizado.");
 	    }
     }
 

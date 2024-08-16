@@ -1,9 +1,9 @@
 package br.com.ifpe.supermercado.apresentacao;
 
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 import br.com.ifpe.supermercado.entidades.classesconcretas.Produto;
 import br.com.ifpe.supermercado.entidades.classesconcretas.Produto.ProdutoBuilder;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 public class TelaProduto {
 //criando apenas uma instância do controlador (Singleton)
@@ -93,7 +93,6 @@ public class TelaProduto {
 	scan.nextLine();
 	    
 	fachadaProduto.atualizarProduto(codigoDeBarras, quantidade);
-	System.out.println("O produto foi atualizado.");
     }
 
 // LENDO PRODUTO XXXXXXXXXX
@@ -115,13 +114,17 @@ public class TelaProduto {
 	
 // MENU PRINCIPAL XXXXXXXXX
     private static void menuPrincipal() {
-		System.out.println("--------- Menu ---------" +
-				"\n 1. Criar Produto" +
-				"\n 2. Atualizar Produto" +
-				"\n 3. Exibir Informações do Produto" +
-                "\n 4. Deletar Produto" +
-				"\n 5. Mostrar todos os produtos" +
-				"\n Digite o número da opção desejada: \n");
+		System.out.println("""
+                            --------- Menu ---------
+                            1. Criar produto
+                            2. Atualizar quantidade do produto
+                            3. Exibir Informações do produto
+                            4. Deletar produto
+							5. Aplicar desconto
+							6. Aplicar promoção Black Friday
+                            7. Mostrar todos os produtos
+                            Digite o número da opção desejada: 
+                                   """);
 	}
 
 }
