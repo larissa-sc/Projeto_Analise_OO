@@ -15,5 +15,5 @@ public interface IGenericDAO<Tipo>{
 	
 	public void deletar(Tipo objeto);
 	
-	List<Tipo> listar();
+	public List<Tipo> listar();
 }

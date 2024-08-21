@@ -3,8 +3,6 @@ package br.com.ifpe.supermercado.interfaces;
 import br.com.ifpe.supermercado.entidades.classesabstratas.EntidadeBase;
 import java.util.List;
 
-import br.com.ifpe.supermercado.entidades.classesabstratas.EntidadeBase;
-
 public interface IGenericControlador<Tipo extends EntidadeBase> {
 
     void criar(Tipo objeto);

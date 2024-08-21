@@ -1,16 +1,15 @@
 package br.com.ifpe.supermercado.negocio.controlador;
 
 import br.com.ifpe.supermercado.entidades.classesconcretas.Produto;
-import br.com.ifpe.supermercado.interfaces.IPrecoAdapter;
-import br.com.ifpe.supermercado.negocio.decorator.DecoradorPrecoBlackFriday;
-import br.com.ifpe.supermercado.negocio.decorator.DecoradorPrecoDesconto;
 import br.com.ifpe.supermercado.negocio.adapter.PrecoAdapterDolar;
+import br.com.ifpe.supermercado.negocio.decorador.DecoradorPrecoBlackFriday;
+import br.com.ifpe.supermercado.negocio.decorador.DecoradorPrecoDesconto;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
 public class ControladorProduto extends GenericControlador<Produto>{
-	private IPrecoAdapter precoAdapterDolar = new PrecoAdapterDolar();
+	private PrecoAdapterDolar precoAdapterDolar = new PrecoAdapterDolar();
 	
 //criando apenas uma instância do controlador (Singleton)
     private static final ControladorProduto instance = new ControladorProduto();
@@ -30,14 +29,17 @@ public class ControladorProduto extends GenericControlador<Produto>{
 		if (produto ==  null) {
 			super.criar(p);
 		}
-		super.criar(produto);
+		else{
+			throw new NoSuchElementException("O objeto já está cadastrado no sistema.");}
     }
 
     public Produto lerProduto(String codigoDeBarras){
 	    Produto produto = procurarProduto(codigoDeBarras); //método que guarda no produto se ele existe ou não (nesse caso null)
 
+		if (produto != null) {
+			System.out.println("Preço em dólar: $" + precoAdapterDolar.getPrecoEmDolar(produto.getPreco()));
+		}
 	    return super.ler(produto);
-		System.out.println("Preço em dólar: $" + precoAdapterDolar.getPrecoEmDolar(produto.getPreco()));
     }
 
     //método para atualizar a quantidade de um produto

@@ -22,8 +22,9 @@ public abstract class GenericControlador<Tipo extends EntidadeBase> implements I
 	    if (objeto == null){ //se for diferente de nulo significa que ele já existe
 		    throw new NoSuchElementException("O objeto já está cadastrado no sistema.");
 	    }
-
+		else{
         dao.inserir(objeto); //após criar, chama o DAO para que adicione ele na lista única de produtos
+		System.out.println("Objeto criado e adicionado.");}
     }
 
 	//método para mostrar as informações de um produto

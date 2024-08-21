@@ -1,4 +1,4 @@
-package br.com.ifpe.supermercado.apresentacao;
+package br.com.ifpe.supermercado.negocio.adapter;
 
 import br.com.ifpe.supermercado.interfaces.IPrecoAdapter;
 

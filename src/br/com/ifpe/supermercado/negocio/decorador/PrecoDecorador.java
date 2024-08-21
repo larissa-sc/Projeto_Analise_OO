@@ -1,4 +1,4 @@
-package br.com.ifpe.supermercado.negocio.decorator;
+package br.com.ifpe.supermercado.negocio.decorador;
 
 import br.com.ifpe.supermercado.interfaces.IDecoradorPreco;
 import br.com.ifpe.supermercado.entidades.classesconcretas.Produto;
