@@ -16,8 +16,16 @@ public class Fachada {
         return controladorProduto.lerProduto(codigoDeBarras);
     }
 
-    public void atualizarProduto(String codigoDeBarras, int quantidade){
+    public void atualizarQProduto(String codigoDeBarras, int quantidade){
         controladorProduto.atualizarQProduto(codigoDeBarras, quantidade);
+    }
+
+    public void aplicarDescontoBlack(String codigoDeBarras, int vezes){
+        controladorProduto.aplicarDescontoBlack(codigoDeBarras, vezes);
+    }
+
+    public void aplicarDescontoComum(String codigoDeBarras, int vezes){
+        controladorProduto.aplicarDescontoComum(codigoDeBarras, vezes);
     }
 
     public void deletarProduto(String codigoDeBarras){

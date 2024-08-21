@@ -1,10 +1,10 @@
 package br.com.ifpe.supermercado.negocio.controlador;
 
-import java.util.List;
-import br.com.ifpe.supermercado.interfaces.IGenericControlador;
 import br.com.ifpe.supermercado.entidades.classesabstratas.EntidadeBase;
+import br.com.ifpe.supermercado.interfaces.IGenericControlador;
 import br.com.ifpe.supermercado.negocio.factory.DAOFactory;
 import br.com.ifpe.supermercado.persistencia.GenericDAO;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public abstract class GenericControlador<Tipo extends EntidadeBase> implements IGenericControlador<Tipo>{
@@ -38,6 +38,7 @@ public abstract class GenericControlador<Tipo extends EntidadeBase> implements I
     }
 
 	//método para atualizar um produto
+    @Override
     public void atualizar(Tipo objeto){
 	   
 	    if (objeto == null){ //verifica se é nulo (não existe)

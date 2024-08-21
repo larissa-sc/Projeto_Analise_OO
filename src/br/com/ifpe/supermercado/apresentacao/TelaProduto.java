@@ -1,15 +1,20 @@
 package br.com.ifpe.supermercado.apresentacao;
 
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 import br.com.ifpe.supermercado.entidades.classesconcretas.Produto;
 import br.com.ifpe.supermercado.entidades.classesconcretas.Produto.ProdutoBuilder;
+import br.com.ifpe.supermercado.interfaces.IPrecoAdapter;
+import br.com.ifpe.supermercado.negocio.adapter.PrecoAdapterDolar;
+
+import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 public class TelaProduto {
 //criando apenas uma instância do controlador (Singleton)
     private static final TelaProduto instance = new TelaProduto();
     private Scanner scan = new Scanner(System.in);
     private Fachada fachadaProduto = new Fachada();
+	private IPrecoAdapter precoAdapterDolar = new PrecoAdapterDolar();
 
     private TelaProduto(){}
 
@@ -20,35 +25,46 @@ public class TelaProduto {
     public void iniciar(){
         while (true) {
             menuPrincipal();
-            int escolha = scan.nextInt();
-	    scan.nextLine();
+            String escolha = scan.nextLine();
 
 	    switch(escolha){
-		    case 1:
+		    case "1":
 			criar();
 			break;
 		
-		    case 2:
-			atualizar();
+		    case "2":
+			atualizarQProduto();
 			break;
 			    
-		    case 3:
+		    case "3":
 			ler();
 			break;
 			    
-		    case 4:
+		    case "4":
 			deletar();
 			break;
 
-		    case 5:
-				if (fachadaProduto.listar() == null) {
-					throw new NoSuchElementException("Não há produtos cadastrados.");
-				}
-				fachadaProduto.listar().forEach(System.out::println);
+			case "5":
+			aplicarDescontoComum();
 			break;
 
+			case "6":
+			aplicarDescontoBlack();
+			break;
+			
+		    case "7":
+				if (fachadaProduto.listar().isEmpty() == true) {
+					throw new NoSuchElementException("Não há produtos cadastrados.");
+				}
+				else{
+					fachadaProduto.listar().forEach(produto -> {
+					System.out.println(produto);
+					System.out.println("Preço em dólar: $" + precoAdapterDolar.getPrecoEmDolar(produto.getPreco()));
+				});}
+				break;
+
 		    default:
-			throw new NoSuchElementException("Opção inválida.");
+				throw new InputMismatchException("Opção Inválida");
 	    }
         }
     }
@@ -80,11 +96,10 @@ public class TelaProduto {
 					.preco(preco)
 					.build();
 	fachadaProduto.criarProduto(produto);
-	System.out.println("Produto criado e adicionado.");
     }
 
 // ATUALIZANDO PRODUTO XXXXXXXXX
-    private void atualizar(){
+    private void atualizarQProduto(){
 	System.out.println("Digite o código de barras do produto a ser atualizado: ");
 	String codigoDeBarras = scan.nextLine();
 
@@ -92,8 +107,7 @@ public class TelaProduto {
 	int quantidade = scan.nextInt();
 	scan.nextLine();
 	    
-	fachadaProduto.atualizarProduto(codigoDeBarras, quantidade);
-	System.out.println("O produto foi atualizado.");
+	fachadaProduto.atualizarQProduto(codigoDeBarras, quantidade);
     }
 
 // LENDO PRODUTO XXXXXXXXXX
@@ -110,18 +124,43 @@ public class TelaProduto {
 	String codigoDeBarras = scan.nextLine();
 
 	fachadaProduto.deletarProduto(codigoDeBarras);
-	System.out.println("Produto removido.");
     }
+
+	// ATUALIZANDO PRODUTO XXXXXXXXX
+    private void aplicarDescontoBlack(){
+		System.out.println("Digite o código de barras do produto a ser aplicado o desconto: ");
+		String codigoDeBarras = scan.nextLine();
+	
+		System.out.println("Digite quantas vezes gostaria de aplicar o desconto de 20%: ");
+		int vezes = scan.nextInt();
+		scan.nextLine();
+			
+		fachadaProduto.aplicarDescontoBlack(codigoDeBarras, vezes);
+	}
+
+	// ATUALIZANDO PRODUTO XXXXXXXXX
+    private void aplicarDescontoComum(){
+		System.out.println("Digite o código de barras do produto a ser aplicado o desconto: ");
+		String codigoDeBarras = scan.nextLine();
+	
+		System.out.println("Digite quantas vezes gostaria de aplicar o desconto de 10%: ");
+		int vezes = scan.nextInt();
+		scan.nextLine();
+			
+		fachadaProduto.aplicarDescontoComum(codigoDeBarras, vezes);
+	}
 	
 // MENU PRINCIPAL XXXXXXXXX
     private static void menuPrincipal() {
-		System.out.println("--------- Menu ---------" +
-				"\n 1. Criar Produto" +
-				"\n 2. Atualizar Produto" +
-				"\n 3. Exibir Informações do Produto" +
-                "\n 4. Deletar Produto" +
-				"\n 5. Mostrar todos os produtos" +
-				"\n Digite o número da opção desejada: \n");
+		System.out.println("--------- Menu ---------"+
+                        	"\n 1. Criar produto"+
+                            "\n 2. Atualizar quantidade do produto"+
+                            "\n 3. Exibir Informações do produto"+
+                            "\n 4. Deletar produto"+
+							"\n 5. Aplicar desconto comum"+
+							"\n 6. Aplicar promoção Black Friday"+
+                            "\n 7. Mostrar todos os produtos"+
+                            "\n Digite o número da opção desejada: ");
 	}
 
 }
