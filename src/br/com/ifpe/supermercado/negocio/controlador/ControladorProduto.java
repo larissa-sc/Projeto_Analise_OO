@@ -19,7 +19,7 @@ public class ControladorProduto extends GenericControlador<Produto>{
     }
 
 //Método para fazer a busca e verificar se o produto já existe dentro do sistema usando o Predicate e filter (filtrar)
-    private Produto procurarProduto(String codigoDeBarras) {
+    public Produto procurarProduto(String codigoDeBarras) {
 		Predicate<Produto> filter = produto -> produto.getCodigoDeBarras().equals(codigoDeBarras);
 		return dao.ler(filter);
 	}
@@ -84,8 +84,7 @@ public class ControladorProduto extends GenericControlador<Produto>{
     public void deletarProduto(String codigoDeBarras){
 	    Produto produto = procurarProduto(codigoDeBarras); //método que guarda no produto se ele existe ou não (nesse caso null)
 	    
-	    super.deletar(produto);
-		System.out.println("Produto removido."); 
+	    super.deletar(produto); 
     }
 
     //método que lista todos os produtos existentes para o usuário

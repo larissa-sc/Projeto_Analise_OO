@@ -4,8 +4,6 @@ import br.com.ifpe.supermercado.entidades.classesconcretas.Produto;
 import br.com.ifpe.supermercado.entidades.classesconcretas.Produto.ProdutoBuilder;
 import br.com.ifpe.supermercado.interfaces.IPrecoAdapter;
 import br.com.ifpe.supermercado.negocio.adapter.PrecoAdapterDolar;
-
-import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -24,48 +22,52 @@ public class TelaProduto {
 
     public void iniciar(){
         while (true) {
-            menuPrincipal();
-            String escolha = scan.nextLine();
-
-	    switch(escolha){
-		    case "1":
-			criar();
-			break;
-		
-		    case "2":
-			atualizarQProduto();
-			break;
-			    
-		    case "3":
-			ler();
-			break;
-			    
-		    case "4":
-			deletar();
-			break;
-
-			case "5":
-			aplicarDescontoComum();
-			break;
-
-			case "6":
-			aplicarDescontoBlack();
-			break;
-			
-		    case "7":
-				if (fachadaProduto.listar().isEmpty() == true) {
-					throw new NoSuchElementException("Não há produtos cadastrados.");
-				}
-				else{
-					fachadaProduto.listar().forEach(produto -> {
-					System.out.println(produto);
-					System.out.println("Preço em dólar: $" + precoAdapterDolar.getPrecoEmDolar(produto.getPreco()));
-				});}
+            try {
+				menuPrincipal();
+				String escolha = scan.nextLine();
+	
+			switch(escolha){
+				case "1":
+				criar();
 				break;
-
-		    default:
-				throw new InputMismatchException("Opção Inválida");
-	    }
+			
+				case "2":
+				atualizarQProduto();
+				break;
+					
+				case "3":
+				ler();
+				break;
+					
+				case "4":
+				deletar();
+				break;
+	
+				case "5":
+				aplicarDescontoComum();
+				break;
+	
+				case "6":
+				aplicarDescontoBlack();
+				break;
+				
+				case "7":
+					if (fachadaProduto.listar().isEmpty() == true) {
+						throw new NoSuchElementException("Não há produtos cadastrados.");
+					}
+					else{
+						fachadaProduto.listar().forEach(produto -> {
+						System.out.println(produto);
+						System.out.println("Preço em dólar: $" + precoAdapterDolar.getPrecoEmDolar(produto.getPreco()));
+					});}
+					break;
+	
+				default:
+					throw new NoSuchElementException("Opção Inválida");
+			}
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
         }
     }
 

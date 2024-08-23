@@ -59,6 +59,7 @@ public abstract class GenericControlador<Tipo extends EntidadeBase> implements I
 	    }
 	    else{ //se existir ele exclui da lista
 		    dao.deletar(objeto);
+			System.out.println("Objeto removido.");
 	    }
     }
 

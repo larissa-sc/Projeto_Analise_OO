@@ -28,7 +28,8 @@ public class Fachada {
     }
 
     public void deletarProduto(String codigoDeBarras){
-        controladorProduto.deletarProduto(codigoDeBarras);
+        Produto produto = controladorProduto.procurarProduto(codigoDeBarras);
+        controladorProduto.deletar(produto);
     }
 
     public List<Produto> listar(){
