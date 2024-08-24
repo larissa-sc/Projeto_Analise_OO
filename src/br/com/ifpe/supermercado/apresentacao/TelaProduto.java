@@ -2,8 +2,6 @@ package br.com.ifpe.supermercado.apresentacao;
 
 import br.com.ifpe.supermercado.entidades.classesconcretas.Produto;
 import br.com.ifpe.supermercado.entidades.classesconcretas.Produto.ProdutoBuilder;
-import br.com.ifpe.supermercado.interfaces.IPrecoAdapter;
-import br.com.ifpe.supermercado.negocio.adapter.PrecoAdapterDolar;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -12,7 +10,6 @@ public class TelaProduto {
     private static final TelaProduto instance = new TelaProduto();
     private Scanner scan = new Scanner(System.in);
     private Fachada fachadaProduto = new Fachada();
-	private IPrecoAdapter precoAdapterDolar = new PrecoAdapterDolar();
 
     private TelaProduto(){}
 
@@ -58,14 +55,13 @@ public class TelaProduto {
 					else{
 						fachadaProduto.listar().forEach(produto -> {
 						System.out.println(produto);
-						System.out.println("Preço em dólar: $" + precoAdapterDolar.getPrecoEmDolar(produto.getPreco()));
 					});}
 					break;
 	
 				default:
 					throw new NoSuchElementException("Opção Inválida");
 			}
-			} catch (Exception e) {
+			} catch (NoSuchElementException e) {
 				System.out.println(e.getMessage());
 			}
         }

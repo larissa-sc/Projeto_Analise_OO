@@ -12,7 +12,8 @@ public class Fachada {
     }
 
     public Produto lerProduto(String codigoDeBarras){
-        return controladorProduto.lerProduto(codigoDeBarras);
+        Produto produto = controladorProduto.procurarProduto(codigoDeBarras);
+        return controladorProduto.ler(produto);
     }
 
     public void atualizarQProduto(String codigoDeBarras, int quantidade){

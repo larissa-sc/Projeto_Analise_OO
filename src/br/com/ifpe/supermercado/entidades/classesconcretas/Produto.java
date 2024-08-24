@@ -1,6 +1,8 @@
 package br.com.ifpe.supermercado.entidades.classesconcretas;
 
 import br.com.ifpe.supermercado.entidades.classesabstratas.EntidadeBase;
+import br.com.ifpe.supermercado.interfaces.IPrecoAdapter;
+import br.com.ifpe.supermercado.negocio.adapter.PrecoAdapterDolar;
 
 //classe abstrata pois age como a entidade base do projeto geral
 public class Produto extends EntidadeBase {
@@ -10,6 +12,7 @@ public class Produto extends EntidadeBase {
 	private String marca;
 	private int quantidade;
 	private double preco;
+	private IPrecoAdapter precoAdapterDolar = new PrecoAdapterDolar();
 
 	public Produto(String codigoDeBarras, String nome, String marca, int quantidade, double preco) {
 		this.codigoDeBarras = codigoDeBarras;
@@ -25,7 +28,8 @@ public class Produto extends EntidadeBase {
 						", nome = " + nome +
 						", marca = " + marca +
 						", quantidade = " + quantidade +
-						", preco = R$  " + preco +"]";
+						", preco = R$  " + preco +
+						", Preço em dólar: $ " + precoAdapterDolar.getPrecoEmDolar(preco) + "]";
 	}
 	
 	public double getPreco() {
