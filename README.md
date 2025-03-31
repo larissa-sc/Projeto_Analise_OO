@@ -1,3 +1,3 @@
 ## Análise e Projeto Orientado a Objetos
 
-Projeto voltado a um sistema inicial de um estoque de supermercado baseado no uso de diferentes Padrões de Projeto.
+Projeto universitário cujo objetivo é utilizar diferentes tipos de Padrões de Projeto para desenvolver um sistema inicial de um estoque de supermercado.
